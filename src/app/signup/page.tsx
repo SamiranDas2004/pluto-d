@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { authAPI } from '@/lib/api';
-import { setToken, setUser } from '@/lib/auth';
+import { setUser } from '@/lib/auth';
 import { useDashboardStore } from '@/store';
 import toast from 'react-hot-toast';
 
@@ -16,7 +16,8 @@ export default function SignupPage() {
   const { setUser: setStoreUser } = useDashboardStore();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    fullName: '',
+    companyName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -25,7 +26,13 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (
+      !formData.fullName ||
+      !formData.companyName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
       toast.error('Please fill in all fields');
       return;
     }
@@ -42,15 +49,20 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      const response = await authAPI.signup(formData.name, formData.email, formData.password);
-      const { token, user } = response.data;
-      
-      setToken(token);
+      const response = await authAPI.signup(
+        formData.fullName,
+        formData.email,
+        formData.companyName,
+        formData.password
+      );
+      const { user } = response.data;
+
+      // Signup does not return a token; prompt user to login after account creation.
       setUser(user);
       setStoreUser(user);
-      
-      toast.success('Account created successfully');
-      router.push('/dashboard');
+
+      toast.success('Account created. Please log in.');
+      router.push('/login');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Signup failed');
     } finally {
@@ -67,12 +79,23 @@ export default function SignupPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-slate-900">Name</label>
+              <label className="text-sm font-medium text-slate-900">Full Name</label>
               <Input
                 type="text"
-                placeholder="Your name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Your full name"
+                value={formData.fullName}
+                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                className="mt-1"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-slate-900">Company Name</label>
+              <Input
+                type="text"
+                placeholder="Your company"
+                value={formData.companyName}
+                onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                 className="mt-1"
               />
             </div>

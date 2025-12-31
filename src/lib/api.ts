@@ -60,7 +60,12 @@ export const analyticsAPI = {
 // Auth
 export const authAPI = {
   login: (email: string, password: string) => api.post('/auth/login', { email, password }),
-  signup: (name: string, email: string, password: string) => api.post('/auth/signup', { name, email, password }),
+  signup: (
+    full_name: string,
+    email: string,
+    company_name: string,
+    password: string
+  ) => api.post('/auth/signup', { full_name, email, company_name, password }),
   logout: () => api.post('/auth/logout'),
   updateProfile: (data: { name?: string; email?: string; password?: string }) =>
     api.put('/auth/profile', data),

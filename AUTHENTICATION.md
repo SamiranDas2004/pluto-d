@@ -40,22 +40,25 @@ POST /auth/login
 **Route**: `/signup`
 
 ```typescript
-// Create new account
+// Create new account (matches backend schema)
 POST /auth/signup
 {
-  "name": "John Doe",
+  "full_name": "John Doe",
   "email": "john@example.com",
+  "company_name": "Acme Inc",
   "password": "password123"
 }
 
-// Response (same as login)
+// Response (no token issued on signup)
 {
-  "message": "Account created",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "message": "User created successfully",
   "user": {
     "id": 5,
+    "full_name": "John Doe",
     "email": "john@example.com",
-    "namespace": "5"
+    "company_name": "Acme Inc",
+    "namespace": "5",
+    "bot_token": "..."
   }
 }
 ```
