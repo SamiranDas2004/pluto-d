@@ -8,12 +8,12 @@ interface TabsProps {
   children: React.ReactNode
 }
 
-const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
-  ({ defaultValue, value, onValueChange, children, ...props }, ref) => {
+const Tabs = React.forwardRef<HTMLDivElement, TabsProps & React.HTMLAttributes<HTMLDivElement>>(
+  ({ defaultValue, value, onValueChange, children, className, ...props }, ref) => {
     const [activeTab, setActiveTab] = React.useState(defaultValue || "")
 
     return (
-      <div ref={ref} {...props}>
+      <div ref={ref} className={className} {...props}>
         {React.Children.map(children, (child) =>
           React.isValidElement(child)
             ? React.cloneElement(child, {
@@ -34,7 +34,7 @@ interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
-  ({ className, ...props }, ref) => (
+  ({ className, activeTab, onTabChange, ...props }, ref) => (
     <div
       ref={ref}
       className={cn("inline-flex h-10 items-center justify-center rounded-md bg-slate-100 p-1", className)}
@@ -71,10 +71,11 @@ TabsTrigger.displayName = "TabsTrigger"
 interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: string
   activeTab?: string
+  onTabChange?: (tab: string) => void
 }
 
 const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
-  ({ className, value, activeTab, ...props }, ref) => (
+  ({ className, value, activeTab, onTabChange, ...props }, ref) => (
     <div
       ref={ref}
       className={cn("mt-2", activeTab !== value && "hidden", className)}

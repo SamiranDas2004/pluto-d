@@ -35,8 +35,10 @@ export interface Visitor {
 
 export interface WidgetSettings {
   botToken: string;
-  color: string;
-  position: 'left' | 'right';
+  primaryColor: string;
+  textColor: string;
+  fontFamily: string;
+  position: 'bottom-right' | 'bottom-left';
   welcomeMessage: string;
 }
 

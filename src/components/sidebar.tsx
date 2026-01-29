@@ -78,7 +78,7 @@ export function Sidebar() {
     <aside className="fixed left-0 top-0 h-screen w-64 border-r border-slate-200 bg-white">
       <div className="flex flex-col h-full">
         <div className="p-6 border-b border-slate-200">
-          <h1 className="text-xl font-bold text-slate-900">PlutoChat</h1>
+          <h1 className="text-xl font-bold text-slate-900">PlutooChat</h1>
         </div>
 
         <nav className="flex-1 overflow-y-auto p-4 space-y-6">

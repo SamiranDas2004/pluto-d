@@ -7,10 +7,22 @@ interface PopoverProps {
 
 const Popover = ({ children }: PopoverProps) => <>{children}</>
 
-interface PopoverTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+interface PopoverTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  asChild?: boolean
+}
 
 const PopoverTrigger = React.forwardRef<HTMLButtonElement, PopoverTriggerProps>(
-  ({ ...props }, ref) => <button ref={ref} {...props} />
+  ({ asChild, children, ...props }, ref) => {
+    if (asChild && children) {
+      const child = React.Children.only(children) as React.ReactElement<any>
+      return React.cloneElement(child, {
+        ...child.props,
+        ...props,
+        ref
+      })
+    }
+    return <button ref={ref} {...props}>{children}</button>
+  }
 )
 PopoverTrigger.displayName = "PopoverTrigger"
 

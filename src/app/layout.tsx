@@ -3,7 +3,7 @@ import './globals.css';
 import { AuthProvider } from '@/components/auth-provider';
 
 export const metadata: Metadata = {
-  title: 'PlutoChat Dashboard',
+  title: 'PlutooChat Dashboard',
   description: 'Manage your chatbot platform',
 };
 

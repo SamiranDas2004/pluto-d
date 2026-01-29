@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Document, ChatSession, ChatMessage, Visitor, WidgetSettings } from '@/types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ;
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -48,7 +48,17 @@ export const visitorAPI = {
 // Widget Settings
 export const widgetAPI = {
   get: () => api.get<WidgetSettings>('/widget/settings'),
-  update: (settings: Partial<WidgetSettings>) => api.put('/widget/settings', settings),
+  update: (settings: { primary_color: string; text_color: string; font_family: string; position: string; welcome_message: string }) => {
+    const formData = new URLSearchParams();
+    formData.append('primary_color', settings.primary_color);
+    formData.append('text_color', settings.text_color);
+    formData.append('font_family', settings.font_family);
+    formData.append('position', settings.position);
+    formData.append('welcome_message', settings.welcome_message);
+    return api.post('/widget/customize', formData, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+  },
   regenerateToken: () => api.post<{ botToken: string }>('/widget/regenerate-token'),
 };
 
