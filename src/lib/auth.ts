@@ -1,14 +1,14 @@
 export const getToken = () => {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('authToken');
+  // Token is now in httpOnly cookie, not accessible from JS
+  return null;
 };
 
 export const setToken = (token: string) => {
-  localStorage.setItem('authToken', token);
+  // Token is now in httpOnly cookie, no need to store
 };
 
 export const removeToken = () => {
-  localStorage.removeItem('authToken');
+  // Token is now in httpOnly cookie, cleared by server
 };
 
 export const getUser = () => {
@@ -18,13 +18,18 @@ export const getUser = () => {
 };
 
 export const setUser = (user: any) => {
-  localStorage.setItem('authUser', JSON.stringify(user));
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('authUser', JSON.stringify(user));
+  }
 };
 
 export const removeUser = () => {
-  localStorage.removeItem('authUser');
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('authUser');
+  }
 };
 
 export const isAuthenticated = () => {
-  return !!getToken();
+  // Check if user data exists (token is in httpOnly cookie)
+  return !!getUser();
 };

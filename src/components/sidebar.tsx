@@ -17,7 +17,8 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
-import { removeToken, removeUser } from '@/lib/auth';
+import { removeUser } from '@/lib/auth';
+import { authAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 
 const navSections = [
@@ -56,11 +57,15 @@ const navSections = [
 function LogoutButton() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    removeToken();
-    removeUser();
-    toast.success('Logged out successfully');
-    router.push('/login');
+  const handleLogout = async () => {
+    try {
+      await authAPI.logout();
+      removeUser();
+      toast.success('Logged out successfully');
+      router.push('/login');
+    } catch (error) {
+      toast.error('Logout failed');
+    }
   };
 
   return (

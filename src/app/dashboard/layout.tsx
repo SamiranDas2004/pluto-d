@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/sidebar';
 import { Header } from '@/components/header';
-import { getToken } from '@/lib/auth';
+import { getUser } from '@/lib/auth';
 
 export default function DashboardLayout({
   children,
@@ -16,8 +16,8 @@ export default function DashboardLayout({
 
   useEffect(() => {
     setIsClient(true);
-    const token = getToken();
-    if (!token) {
+    const user = getUser();
+    if (!user) {
       router.push('/login');
     }
   }, [router]);

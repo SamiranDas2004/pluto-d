@@ -7,9 +7,6 @@ import { AnalyticsCard } from '@/components/analytics-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { analyticsAPI } from '@/lib/api';
-import axios from 'axios';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 interface ChartData {
   date: string;
@@ -45,13 +42,11 @@ export default function DashboardPage() {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('authToken');
-      const response = await axios.get(`${API_BASE}/analytics/dashboard?days=${period}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await analyticsAPI.dashboard(period);
       setStats(response.data);
     } catch (error) {
       console.error('Failed to fetch analytics:', error);
+      router.push('/login');
     } finally {
       setLoading(false);
     }

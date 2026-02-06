@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { authAPI } from '@/lib/api';
-import { setToken, setUser } from '@/lib/auth';
+import { setUser, getUser } from '@/lib/auth';
 import { useDashboardStore } from '@/store';
 import toast from 'react-hot-toast';
 
@@ -20,6 +20,13 @@ export default function LoginPage() {
     password: '',
   });
 
+  useEffect(() => {
+    // Redirect if already logged in
+    if (getUser()) {
+      router.push('/dashboard');
+    }
+  }, [router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -31,9 +38,8 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const response = await authAPI.login(formData.email, formData.password);
-      const { token, user } = response.data;
+      const { user } = response.data;
       
-      setToken(token);
       setUser(user);
       setStoreUser(user);
       

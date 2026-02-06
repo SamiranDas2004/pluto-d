@@ -1,23 +1,24 @@
 import axios from 'axios';
 import { Document, ChatSession, ChatMessage, Visitor, WidgetSettings } from '@/types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ;
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 const api = axios.create({
   baseURL: API_BASE,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
-// Add auth token to requests
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// Add auth token to requests (no longer needed with cookies)
+// api.interceptors.request.use((config) => {
+//   const token = localStorage.getItem('authToken');
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 // Documents
 export const documentAPI = {
@@ -64,7 +65,7 @@ export const widgetAPI = {
 
 // Analytics
 export const analyticsAPI = {
-  dashboard: () => api.get('/analytics/dashboard'),
+  dashboard: (days: number = 7) => api.get(`/analytics/dashboard?days=${days}`),
 };
 
 // Auth
